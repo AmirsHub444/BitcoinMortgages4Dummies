@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitcoin Mortgages for Dummies · Block Wall Street</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0A1128; --navy-2:#101A38; --navy-3:#182448;
+    --gold:#D4AF37; --gold-bright:#F0C64C;
+    --green:#4CC98A; --red:#E06666;
+    --ink:#E8EAF2; --ink-dim:#9AA3BC;
+    --line:rgba(212,175,55,.22);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--navy);color:var(--ink);font-family:'Barlow',sans-serif;font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:0 22px}
+  .gold{color:var(--gold-bright)}
+
+  header{padding:70px 0 52px;background:radial-gradient(ellipse 120% 90% at 50% -10%, #1B2A55 0%, var(--navy) 62%);border-bottom:1px solid var(--line);text-align:center}
+  .eyebrow{font-family:'DM Mono',monospace;font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+  h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,7.4vw,72px);line-height:1;letter-spacing:.015em;color:#fff}
+  .sub{margin:18px auto 0;max-width:600px;font-size:18px;color:var(--ink-dim)}
+  .bigdeal{margin:28px auto 0;display:inline-block;font-family:'DM Mono',monospace;font-size:16px;color:var(--gold-bright);border:1px solid var(--line);border-radius:10px;padding:14px 20px;background:rgba(212,175,55,.06)}
+  .bigdeal .eq{color:var(--ink-dim);padding:0 8px}
+
+  main{padding-bottom:20px}
+  section{padding:54px 0 34px;border-bottom:1px solid rgba(212,175,55,.12)}
+  .sec-tag{font-family:'DM Mono',monospace;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+  h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,4.8vw,42px);line-height:1.05;letter-spacing:.015em;color:#fff;margin-bottom:16px}
+  section p{margin-bottom:14px}
+  section p strong{color:#fff}
+
+  .step{display:flex;gap:18px;margin:26px 0;align-items:flex-start}
+  .step .n{flex:0 0 auto;font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--gold-bright);border:1px solid var(--line);border-radius:12px;width:58px;height:58px;display:flex;align-items:center;justify-content:center;background:var(--navy-2)}
+  .step h3{font-family:'Bebas Neue',sans-serif;font-size:23px;letter-spacing:.03em;color:#fff;margin-bottom:6px}
+  .step p{font-size:15.5px;color:var(--ink-dim);margin-bottom:0}
+  .step p b{color:#fff}
+  .step p .g{color:var(--green)}
+  .step p .r{color:var(--red)}
+
+  .diagram{margin:24px 0;background:var(--navy-2);border:1px solid var(--line);border-radius:12px;padding:20px}
+  .diagram .label{font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  .diagram svg{width:100%;height:auto;display:block}
+
+  .callout{border-left:3px solid var(--gold);background:var(--navy-2);border-radius:0 10px 10px 0;padding:16px 18px;margin:22px 0}
+  .callout .label{font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+  .callout p{margin:0;font-size:15.5px}
+  .callout.warn{border-left-color:var(--red)}
+  .callout.warn .label{color:var(--red)}
+  .callout.win{border-left-color:var(--green)}
+  .callout.win .label{color:var(--green)}
+
+  .sim{background:var(--navy-2);border:1px solid var(--line);border-radius:14px;padding:24px;margin:26px 0}
+  .sim .label{font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+  .sim .hint{font-size:14px;color:var(--ink-dim);margin-bottom:18px}
+  .sim input[type=range]{width:100%;accent-color:var(--gold);cursor:pointer;height:32px}
+  .sim .readout{font-family:'DM Mono',monospace;text-align:center;margin:6px 0 18px;font-size:26px;color:#fff}
+  .sim .readout small{display:block;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);margin-top:2px}
+  .simgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:6px}
+  @media(max-width:600px){.simgrid{grid-template-columns:1fr}}
+  .simcell{background:var(--navy-3);border:1px solid rgba(212,175,55,.18);border-radius:10px;padding:14px;text-align:center}
+  .simcell .k{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:6px}
+  .simcell .v{font-family:'DM Mono',monospace;font-size:20px;color:#fff}
+  .simcell .v.green{color:var(--green)}
+  .simcell .v.red{color:var(--red)}
+  .simcell .v.gold{color:var(--gold-bright)}
+  .verdict{margin-top:16px;border-radius:10px;padding:14px 16px;font-size:15px;text-align:center;border:1px solid var(--line);background:var(--navy-3)}
+  .verdict b{color:#fff}
+  .dpbtns{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
+  .dpbtn{font-family:'DM Mono',monospace;font-size:14px;color:var(--ink);background:var(--navy-3);border:1px solid rgba(212,175,55,.25);border-radius:8px;padding:9px 16px;cursor:pointer}
+  .dpbtn:hover{border-color:var(--gold)}
+  .dpbtn.active{border-color:var(--gold-bright);background:rgba(212,175,55,.12);color:var(--gold-bright)}
+  .dpbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+  .vocab{background:var(--navy-2);border:1px solid var(--line);border-radius:10px;padding:20px;margin:22px 0}
+  .vocab .label{font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+  .vocab dl{display:grid;grid-template-columns:max-content 1fr;gap:10px 16px}
+  .vocab dt{font-family:'DM Mono',monospace;font-size:13.5px;color:var(--gold-bright);white-space:nowrap}
+  .vocab dd{font-size:14.5px;color:var(--ink-dim)}
+  @media(max-width:560px){.vocab dl{grid-template-columns:1fr}.vocab dd{margin-bottom:6px}}
+
+  .qa{margin:20px 0}
+  .qa details{background:var(--navy-2);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}
+  .qa summary{cursor:pointer;padding:14px 18px;font-weight:600;color:#fff;font-size:15.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .qa summary::-webkit-details-marker{display:none}
+  .qa summary::after{content:"+";font-family:'DM Mono',monospace;color:var(--gold-bright);font-size:18px}
+  .qa details[open] summary::after{content:"–"}
+  .qa .a{padding:0 18px 16px;font-size:15px;color:var(--ink-dim)}
+  .qa .a b{color:#fff}
+
+  footer{padding:44px 0 60px;text-align:center}
+  footer .brand{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.08em;color:var(--gold-bright)}
+  footer p{font-size:13.5px;color:var(--ink-dim);max-width:660px;margin:10px auto 0}
+
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Block Wall Street · Plain-English Series</div>
+    <h1>Bitcoin Mortgages<br><span class="gold">For Dummies</span></h1>
+    <p class="sub">No jargon. No prior knowledge needed. Just the simplest possible explanation of how you can put a small down payment on Bitcoin and pay it off monthly — like a house.</p>
+    <div class="bigdeal">$162 DOWN <span class="eq">→</span> $8,100 OF BITCOIN</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- THE BIG IDEA -->
+  <section>
+    <div class="sec-tag">Start Here</div>
+    <h2>The Big Idea</h2>
+    <p>Think about how most families ever afford a house. Almost nobody saves up the full price in cash. Instead they use a <strong>mortgage</strong>: put a little money down, move in <em>today</em>, and pay the rest off month by month for years. At the end, the house is fully theirs.</p>
+    <p>A <strong>Bitcoin mortgage</strong> is the exact same move — but the thing you're buying isn't a house. It's Bitcoin.</p>
+    <p>You put down a small deposit. A computer program (called a <strong>smart contract</strong> — more on that in a second) buys the Bitcoin and holds onto it for you, like a safe with your name on it. You make fixed monthly payments. When you've paid it off, the safe opens and <strong>the Bitcoin is delivered to your wallet — 100% yours.</strong></p>
+    <div class="callout win">
+      <div class="label">The Headline Numbers</div>
+      <p>The deposit can be as small as <b>2%</b>. That means <b>$162 down</b> gets you a mortgage on <b>$8,100 worth of Bitcoin</b> — at today's price, locked in for the whole loan. You don't need to be rich to start. You need steady income and the discipline to pay every month.</p>
+    </div>
+  </section>
+
+  <!-- 5 STEPS -->
+  <section>
+    <div class="sec-tag">How It Works</div>
+    <h2>The Whole Thing in 5 Steps</h2>
+
+    <div class="step">
+      <div class="n">1</div>
+      <div>
+        <h3>You Want Bitcoin, But $8,100 Is a Lot of Cash</h3>
+        <p>Saving up the full amount could take years — and the price might run away from you while you save. Sound familiar? It's the same trap as saving for a house in a rising market.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="n">2</div>
+      <div>
+        <h3>So You Put $162 Down Instead</h3>
+        <p>You connect a crypto wallet (that's the whole "application" — <b>no credit check, no paperwork, no banker deciding if you qualify</b>) and deposit your down payment. That $162 opens a mortgage on the full $8,100 of Bitcoin.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="n">3</div>
+      <div>
+        <h3>A Smart Contract Holds the Bitcoin</h3>
+        <p>A smart contract is a program on the blockchain that follows its rules automatically — <b>nobody can change them, cheat them, or make exceptions.</b> It buys the Bitcoin and locks it in custody. Think of it as a robot escrow agent that never sleeps and never takes a bribe.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="n">4</div>
+      <div>
+        <h3>You Pay Monthly — And Here's the Magic</h3>
+        <p>Your price is <b>locked at today's level</b> for the entire loan. If Bitcoin doubles next year, you're still paying it off at the old price — <span class="g">all that gain is yours</span>. And if the price crashes? <b>Nothing happens to your loan.</b> No panic-selling, no getting kicked out of your position. The only rule: <span class="r">keep making your payments</span>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="n">5</div>
+      <div>
+        <h3>Final Payment → The Safe Opens</h3>
+        <p>The moment the loan is fully paid — whether that took the full term or you paid it off early — the smart contract releases the Bitcoin straight to your wallet. <b>Every sat, yours, forever.</b> No one to ask. It just happens, because the rules say so.</p>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="label">The Flow, In One Picture</div>
+      <svg viewBox="0 0 760 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: you pay a down payment to a smart contract which holds Bitcoin; monthly payments flow in; at the end Bitcoin is released to your wallet">
+        <rect x="20" y="55" width="150" height="80" rx="12" fill="#182448" stroke="rgba(212,175,55,.3)"/>
+        <text x="95" y="90" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="20" fill="#fff">YOU</text>
+        <text x="95" y="112" text-anchor="middle" font-family="Barlow, sans-serif" font-size="12.5" fill="#9AA3BC">$162 down +</text>
+        <text x="95" y="127" text-anchor="middle" font-family="Barlow, sans-serif" font-size="12.5" fill="#9AA3BC">monthly payments</text>
+        <line x1="170" y1="95" x2="290" y2="95" stroke="#D4AF37" stroke-width="2" marker-end="url(#arr)"/>
+        <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#D4AF37"/></marker></defs>
+        <rect x="295" y="35" width="180" height="120" rx="12" fill="#182448" stroke="#D4AF37"/>
+        <text x="385" y="72" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="19" fill="#F0C64C">SMART CONTRACT</text>
+        <text x="385" y="96" text-anchor="middle" font-family="DM Mono, monospace" font-size="22" fill="#fff">₿ $8,100</text>
+        <text x="385" y="120" text-anchor="middle" font-family="Barlow, sans-serif" font-size="12.5" fill="#9AA3BC">held safe · price locked</text>
+        <text x="385" y="136" text-anchor="middle" font-family="Barlow, sans-serif" font-size="12.5" fill="#9AA3BC">rules no one can change</text>
+        <line x1="475" y1="95" x2="595" y2="95" stroke="#4CC98A" stroke-width="2" marker-end="url(#arr2)"/>
+        <defs><marker id="arr2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#4CC98A"/></marker></defs>
+        <text x="535" y="82" text-anchor="middle" font-family="Barlow, sans-serif" font-size="12" fill="#4CC98A">loan paid off</text>
+        <rect x="600" y="55" width="140" height="80" rx="12" fill="#182448" stroke="rgba(76,201,138,.5)"/>
+        <text x="670" y="90" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="19" fill="#4CC98A">YOUR WALLET</text>
+        <text x="670" y="114" text-anchor="middle" font-family="Barlow, sans-serif" font-size="12.5" fill="#9AA3BC">₿ 100% yours</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- THE ONE RULE -->
+  <section>
+    <div class="sec-tag">The One Rule</div>
+    <h2>The Timer: The Only Way to Lose</h2>
+    <p>Here's the deal in plain terms. A Bitcoin crash <strong>cannot</strong> take your position away. There's no "liquidation," no margin call, no forced sale — words you may have heard from other crypto platforms. The market can do whatever it wants.</p>
+    <p>But there is <strong>one rule, and it has teeth:</strong> every payment restarts a countdown clock. If you go <strong>45 days</strong> without paying, your loan can be defaulted — and when that happens, <strong>you lose everything</strong>. The down payment, every monthly payment you ever made, and the Bitcoin. Gone. No refund, no partial credit, no do-over.</p>
+    <div class="diagram">
+      <div class="label">The Countdown Clock</div>
+      <svg viewBox="0 0 760 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline from day 0 payment to day 45 default">
+        <line x1="40" y1="60" x2="720" y2="60" stroke="rgba(212,175,55,.35)" stroke-width="2"/>
+        <circle cx="70" cy="60" r="9" fill="#4CC98A"/>
+        <text x="70" y="34" text-anchor="middle" font-family="DM Mono, monospace" font-size="13" fill="#4CC98A">DAY 0</text>
+        <text x="70" y="92" text-anchor="middle" font-family="Barlow, sans-serif" font-size="12.5" fill="#9AA3BC">You pay — clock resets</text>
+        <circle cx="380" cy="60" r="7" fill="#F0C64C"/>
+        <text x="380" y="34" text-anchor="middle" font-family="DM Mono, monospace" font-size="13" fill="#F0C64C">DAY ~30</text>
+        <text x="380" y="92" text-anchor="middle" font-family="Barlow, sans-serif" font-size="12.5" fill="#9AA3BC">Pay again here. Every month. Boring wins.</text>
+        <circle cx="690" cy="60" r="9" fill="#E06666"/>
+        <line x1="690" y1="45" x2="690" y2="75" stroke="#E06666" stroke-width="2"/>
+        <text x="690" y="34" text-anchor="middle" font-family="DM Mono, monospace" font-size="13" fill="#E06666">DAY 45</text>
+        <text x="690" y="92" text-anchor="middle" font-family="Barlow, sans-serif" font-size="12.5" fill="#E06666">Default — lose it all</text>
+      </svg>
+    </div>
+    <div class="callout warn">
+      <div class="label">Real Talk</div>
+      <p>A house foreclosure at least sells the house and gives you back your equity. <b>This machine gives back nothing.</b> That's the trade: it forgives every market crash and forgives zero missed deadlines. So the golden rule is simple — <b>never open a payment bigger than your worst month can handle, and never, ever ride the clock.</b> Keep 2–3 months of payments saved up before you start. Discipline IS the strategy.</p>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE -->
+  <section>
+    <div class="sec-tag">Try It Yourself</div>
+    <h2>Play With the Deal</h2>
+    <p>You locked in <strong>$8,100 of Bitcoin</strong> at today's price. First, pick your down payment. Then drag the slider to see what happens to <em>your</em> Bitcoin as the price moves — and notice what never changes.</p>
+
+    <div class="sim">
+      <div class="label">Step 1 · Choose Your Down Payment</div>
+      <div class="dpbtns" role="group" aria-label="Down payment options">
+        <button class="dpbtn active" data-dp="2">2% · $162</button>
+        <button class="dpbtn" data-dp="10">10% · $810</button>
+        <button class="dpbtn" data-dp="25">25% · $2,025</button>
+      </div>
+      <p class="hint" id="dphint">2% down = the smallest deposit, the biggest loan balance to pay off. You're controlling 50× your deposit.</p>
+
+      <div class="label">Step 2 · Drag Where Bitcoin Goes</div>
+      <p class="hint">Your locked price is where the value = $8,100. Slide to see the future.</p>
+      <input type="range" id="px" min="4050" max="24300" step="405" value="8100" aria-label="Future value of your mortgaged Bitcoin">
+      <div class="readout"><span id="pxval">$8,100</span><small>what your mortgaged Bitcoin is worth</small></div>
+
+      <div class="simgrid">
+        <div class="simcell">
+          <div class="k">Your Locked Price</div>
+          <div class="v gold">$8,100</div>
+        </div>
+        <div class="simcell">
+          <div class="k">Your Gain / Loss vs. Lock</div>
+          <div class="v" id="pnl">$0</div>
+        </div>
+        <div class="simcell">
+          <div class="k">Your Monthly Payment</div>
+          <div class="v">UNCHANGED</div>
+        </div>
+      </div>
+      <div class="verdict" id="verdict"><b>Right at your lock.</b> Every payment from here builds toward Bitcoin you own outright.</div>
+    </div>
+
+    <div class="callout win">
+      <div class="label">The Lesson Hiding in the Slider</div>
+      <p>Did you catch it? <b>The third box never moves.</b> Bitcoin can double or crash — your payment stays the same and your position stays alive. The market is loud; your mortgage is quiet. The only slider that can hurt you is the one that isn't on this page: whether you pay on time.</p>
+    </div>
+  </section>
+
+  <!-- WORDS TO KNOW -->
+  <section>
+    <div class="sec-tag">Cheat Sheet</div>
+    <h2>Words to Know</h2>
+    <div class="vocab">
+      <div class="label">Say These Like You've Known Them for Years</div>
+      <dl>
+        <dt>MORTGAGE</dt><dd>Own something big now, pay it off slowly. Small deposit, monthly payments, full ownership at the end.</dd>
+        <dt>DOWN PAYMENT</dt><dd>Your upfront deposit. Here it can be as small as 2% — $162 on $8,100 of Bitcoin.</dd>
+        <dt>SMART CONTRACT</dt><dd>A program on the blockchain that holds the Bitcoin and enforces the rules automatically. Nobody can change or cheat it.</dd>
+        <dt>PRICE LOCK</dt><dd>Your buy-in price is frozen the day you open the loan. Future gains above it are all yours.</dd>
+        <dt>LIQUIDATION</dt><dd>When other platforms force-sell your position because the price dropped. Doesn't exist here.</dd>
+        <dt>DEFAULT</dt><dd>What happens if you stop paying for 45 days: you lose everything in the contract. The one rule with teeth.</dd>
+        <dt>ERF</dt><dd>Early Repayment Fee — a flat 1% cost to pay the whole loan off early, anytime, and take your Bitcoin out.</dd>
+        <dt>STABLECOIN</dt><dd>A crypto dollar (like USDC) that stays at $1. It's what you make your payments with.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- QUESTIONS -->
+  <section>
+    <div class="sec-tag">Straight Answers</div>
+    <h2>Questions You'd Actually Ask</h2>
+    <div class="qa">
+      <details>
+        <summary>Do I need good credit or a bank account?</summary>
+        <div class="a">No. There is no credit check, no application, and no banker. <b>A crypto wallet is the entire application.</b> You need stablecoins for the deposit and payments — that's it.</div>
+      </details>
+      <details>
+        <summary>What if Bitcoin crashes 50% next week?</summary>
+        <div class="a">Your loan doesn't notice. <b>Nothing is triggered by price.</b> You keep paying the same monthly amount, you keep your full position, and if you believe in Bitcoin long-term, you just keep going. The crash only becomes your problem if it stops you from making payments.</div>
+      </details>
+      <details>
+        <summary>What if Bitcoin moons — can I cash out early?</summary>
+        <div class="a">Yes. Pay off the remaining balance plus a flat <b>1% Early Repayment Fee</b>, anytime — even before your first payment is due. The smart contract releases the Bitcoin and returns your deposit, and you can hold it or sell it. Your call.</div>
+      </details>
+      <details>
+        <summary>Can I pay extra or pay early each month?</summary>
+        <div class="a">Yes — payments are flexible. Pay any amount, any time, and <b>every payment resets your 45-day countdown.</b> Paying early in your window is the single smartest habit in this whole system.</div>
+      </details>
+      <details>
+        <summary>What's the catch?</summary>
+        <div class="a">The default rule. Go 45 days without paying and <b>you lose everything you've put in — no refund.</b> This machine is generous about market chaos and merciless about missed payments. It rewards exactly one thing: showing up every month. If that's you, the machine works for you.</div>
+      </details>
+      <details>
+        <summary>Is this only for Bitcoin?</summary>
+        <div class="a">Bitcoin and Ethereum are live today (Bitcoin is the flagship). On the roadmap: <b>tokenized gold</b>, and eventually tokenized real-world assets like real estate and treasuries. The same machine, pointed at more and more of the world's wealth.</div>
+      </details>
+    </div>
+    <div class="callout">
+      <div class="label">Where This Leads</div>
+      <p>For a hundred years, the mortgage was how ordinary families with steady paychecks — not lump sums — built generational wealth. It just got rebuilt for the digital age: <b>no gatekeepers, price locked, discipline rewarded.</b> Ready to go deeper? The full BWS course, <i>Mortgages on Generational Wealth</i>, breaks down the strategies, the stress tests, and the advanced plays.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="brand">BLOCK WALL STREET</div>
+  <p>Bitcoin Mortgages for Dummies · Plain-English Series. Educational content only — not financial advice. Digital asset mortgages are provided by early-stage DeFi protocols and carry real risk, including total loss of all funds paid in if the loan defaults. Never commit to payments your income can't sustain.</p>
+</footer>
+
+<script>
+(function(){
+  var LOCK = 8100;
+  var px = document.getElementById('px');
+  var pxval = document.getElementById('pxval');
+  var pnl = document.getElementById('pnl');
+  var verdict = document.getElementById('verdict');
+  var dphint = document.getElementById('dphint');
+  var dp = 2;
+  var hints = {
+    2:  '2% down = the smallest deposit, the biggest loan balance to pay off. You\u2019re controlling 50\u00d7 your deposit.',
+    10: '10% down = a $810 deposit, a smaller loan balance, cheaper monthly payments, and more cushion.',
+    25: '25% down = a $2,025 deposit. Least leverage, lowest payments, most breathing room. Slow and steady.'
+  };
+  function fmt(n){
+    var sign = n < 0 ? '-' : '';
+    n = Math.abs(Math.round(n));
+    return sign + '$' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+  function update(){
+    var v = parseInt(px.value, 10);
+    pxval.textContent = fmt(v);
+    var diff = v - LOCK;
+    pnl.textContent = (diff > 0 ? '+' : '') + fmt(diff);
+    pnl.className = 'v ' + (diff > 0 ? 'green' : diff < 0 ? 'red' : '');
+    if (diff > LOCK * 0.5) {
+      verdict.innerHTML = '<b>Bitcoin ran \u2014 and every dollar of that gain above your lock is yours.</b> You could keep paying the same low payment, or pay it off early (1% fee) and take delivery. Your payment never went up.';
+    } else if (diff > 0) {
+      verdict.innerHTML = '<b>You\u2019re in the green.</b> The price rose above your lock and the gain belongs to you \u2014 while your monthly payment didn\u2019t move an inch.';
+    } else if (diff === 0) {
+      verdict.innerHTML = '<b>Right at your lock.</b> Every payment from here builds toward Bitcoin you own outright.';
+    } else if (diff > -LOCK * 0.35) {
+      verdict.innerHTML = '<b>Price dipped \u2014 and nothing happened to you.</b> No liquidation, no margin call, no forced sale. Keep paying, keep your position, let time work.';
+    } else {
+      verdict.innerHTML = '<b>Even a deep crash can\u2019t touch the loan.</b> On other platforms this wick would have wiped you out. Here, the only question is the same as always: can you keep making your payment?';
+    }
+  }
+  px.addEventListener('input', update);
+  document.querySelectorAll('.dpbtn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.dpbtn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      dp = parseInt(btn.getAttribute('data-dp'), 10);
+      dphint.textContent = hints[dp];
+    });
+  });
+  update();
+})();
+</script>
+
+</body>
+</html>
